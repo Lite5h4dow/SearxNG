@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  searxng:
+    container_name: searxng
+    image:  searxng/searxng:latest
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - SEARXNG_BASE_URL=https://search.litelot.us
+
+  redis:
+    container_name: redis
+    image: "redis:alpine"
+    command: redis-server --save "" --appendonly "no"
+    tmpfs:
+      - /var/lib/redis
+
+  searx_tunnel:
+    contianer_name: searx_tunnel
+    image: cloudflare/cloudflared:latest 
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
